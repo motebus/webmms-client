@@ -1,0 +1,21 @@
+{
+  "name": "webmms",
+  "version": "0.1.0",
+  "main": "dist/bundle.js",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "redux": "^4.0.1",
+    "socket.io-client": "^2.2.0"
+  },
+  "scripts": {
+    "build": "NODE_ENV=production rollup -c"
+  },
+  "devDependencies": {
+    "rollup": "^1.15.1",
+    "rollup-plugin-alias": "^1.5.2",
+    "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-node-resolve": "^5.0.1",
+    "rollup-plugin-replace": "^2.2.0"
+  }
+}
