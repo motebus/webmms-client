@@ -8158,7 +8158,7 @@
               return new Promise(resolve => {
                   this.socket.emit('request', {
                       func: 'send',
-                      body: { topic, DDN, data: payload }
+                      body: { topic, ddn: DDN, data: payload }
                   }, function (reply) { resolve(reply); });
               })
           },
@@ -8170,7 +8170,7 @@
               return new Promise(resolve => {
                   this.socket.emit('request', {
                       func: 'call',
-                      data: { topic, DDN, func, args: payload }
+                      data: { topic, ddn: DDN, func, args: payload }
                   }, function (reply) { resolve(reply); });
               })
           },
