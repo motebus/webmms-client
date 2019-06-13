@@ -8155,7 +8155,7 @@
               let { sockStat } = this.store.getState();
               if (!sockStat) return Promise.reject('websocket not ready')
 
-              return Promise(resolve => {
+              return new Promise(resolve => {
                   this.socket.emit('request', {
                       func: 'send',
                       body: { topic, DDN, data: payload }
@@ -8167,7 +8167,7 @@
               let { sockStat } = this.store.getState();
               if (!sockStat) return Promise.reject('websocket not ready')
 
-              return Promise(resolve => {
+              return new Promise(resolve => {
                   this.socket.emit('request', {
                       func: 'call',
                       data: { topic, DDN, func, args: payload }
