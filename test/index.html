@@ -1,10 +1,48 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-	<title>test webmms</title>
-</head>
-<body>
+    <meta charset="utf-8">
+    <title>test webmms</title>
     <script src="../dist/bundle.js"></script>
+</head>
+
+<body onload="test()">
+    <p id="DDN"></p>
+    <p id="message"></p>
+    <script type="text/javascript">
+        function test() {
+            console.log("testing")
+            let mms = webmms()
+
+            mms.on('registered', reply => {
+                let { result: { DDN } } = reply
+                let id = 0
+                this.DDN = DDN
+                document.getElementById('DDN').innerText = `DDN: ${DDN}`
+
+                setInterval(async () => {
+                    await mms.sendMMS({
+                        topic: '',
+                        DDN: this.DDN,
+                        payload: `Hello webmms! ${id++}`
+                    })
+                }, 3000)
+
+            })
+
+            mms.on('message', (method, from, data, ack) => {
+                document.getElementById('message').innerText = `
+                    method: ${method}
+                    from: ${JSON.stringify(from)}
+                    data: ${data}
+                    ack: ${ack}
+                `
+            })
+
+            mms.on('state', state => console.log(state))
+        }
+    </script>
 </body>
+
 </html>

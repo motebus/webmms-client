@@ -8126,6 +8126,47 @@
 
   Object.freeze(mmserr);
 
+  const inHandler = (inctl, data, ack) => {
+      let ddn = '';
+      try {
+          ddn = inctl.To.DDN ? inctl.To.DDN : ddn;
+      } catch (e) {
+          ddn = '';
+      }
+
+      let { cmd = '' } = data;
+      cmd = cmd.toLowerCase();
+
+      let result;
+      switch (cmd) {
+          case 'ping':
+          case 'trace':
+          case 'tracedc': {
+              let { trace } = data;
+              if (Array.isArray(trace) && cmd != 'tracedc') {
+                  trace.push({ ddn, time: new Date() });
+              }
+
+              result = {
+                  response: cmd,
+                  ErrCode: mmserr.OK.code,
+                  ErrMsg: mmserr.OK.msg,
+                  Trace: trace
+              };
+              break
+          }
+          default: {
+              result = {
+                  response: cmd,
+                  ErrCode: mmserr.InvalidData.code,
+                  ErrMsg: mmserr.InvalidData.msg
+              };
+              break
+          }
+      }
+      if (typeof cb === 'function') cb(result);
+  };
+
   function createMMS({ wsurl = 'https://lib.ypcloud.com' } = {}) {
       let webmms = {
           events: new Map([]),
@@ -8181,7 +8222,7 @@
                   ErrCode: mmserr.DCNotConn.code,
                   ErrMsg: mmserr.DCNotConn.msg
               })
-              
+
               let { SToken } = mms;
               if (!SToken) return Promise.reject({
                   ErrCode: mmserr.NullSToken.code,
@@ -8328,9 +8369,23 @@
       webmms.socket.on('message', function (body, ack) {
           if (typeof body !== 'object') return
 
-          let { method, inctl, data } = body;
-          let { From: from } = inctl;
-          webmms.emit('message', method, from, data, ack);
+          let { method, ctl: inctl, data } = body;
+          let { From: from, msgtype = '' } = inctl;
+          
+          if (!msgtype) {
+              webmms.emit('message', method, from, data, ack);
+              return
+          }
+
+          if (msgtype === 'in') {
+              inHandler(inctl, data);
+              return
+          }
+
+          if (typeof ack === 'function') ack({
+              ErrCode: mmserr.InvalidData.code,
+              ErrMsg: mmserr.InvalidData.msg
+          });
       });
 
       webmms.socket.on('state', function (msg) {
@@ -8370,11 +8425,11 @@
           webmms.emit('error', err);
       });
 
-      webmms.socket.on('connect_error', function() {
+      webmms.socket.on('connect_error', function () {
           webmms.emit('connect_error', 'websocket connect error');
       });
 
-      webmms.socket.on('connect_timeout', function() {
+      webmms.socket.on('connect_timeout', function () {
           webmms.emit('connect_timeout', 'websocket connect timeout');
       });
 
