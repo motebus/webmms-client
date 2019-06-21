@@ -7,6 +7,16 @@
   let mms = webmms()
   ```
 
+  - `webmms(option)`
+    
+    | param    | type                 |
+    | -------- | -------------------- |
+    | option   | `Object`             |
+    | option.wsurl   |  `String`      |
+    | option.EiToken | `String`       |
+    | option.SToken  | `String`       |
+
+
 - **Methods**
 
   - `on(name, callback)`

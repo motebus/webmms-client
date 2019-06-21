@@ -8126,7 +8126,7 @@
 
   Object.freeze(mmserr);
 
-  const inHandler = (inctl, data, ack) => {
+  const inHandler = (inctl, data, cb) => {
       let ddn = '';
       try {
           ddn = inctl.To.DDN ? inctl.To.DDN : ddn;
@@ -8167,13 +8167,13 @@
       if (typeof cb === 'function') cb(result);
   };
 
-  function createMMS({ wsurl = 'https://lib.ypcloud.com' } = {}) {
+  function createMMS({ wsurl = 'https://lib.ypcloud.com', EiToken = '', SToken = '' } = {}) {
       let webmms = {
           events: new Map([]),
 
           store: createStore(reducers, {
               sockStat: false,
-              mms: { EiToken: '', SToken: '', UToken: '' }
+              mms: { EiToken, SToken, UToken: '' }
           }),
 
           socket: lib$1(wsurl, {
@@ -8371,14 +8371,14 @@
 
           let { method, ctl: inctl, data } = body;
           let { From: from, msgtype = '' } = inctl;
-          
+
           if (!msgtype) {
               webmms.emit('message', method, from, data, ack);
               return
           }
 
           if (msgtype === 'in') {
-              inHandler(inctl, data);
+              inHandler(inctl, data, ack);
               return
           }
 
