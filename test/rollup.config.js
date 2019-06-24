@@ -1,23 +1,18 @@
-import alias from 'rollup-plugin-alias'
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
-import replace from 'rollup-plugin-replace'
+import alias from 'rollup-plugin-alias'
 
 export default {
-    input: 'src/main.js',
+    input: 'test/main.js',
     output: {
-        name: 'webmms',
-        file: 'dist/bundle.js',
+        name: 'test',
+        file: 'test/test.js',
         format: 'umd'
     },
     plugins: [
         alias({
             resolve: ['js'],
-            actions: './actions',
-            reducers: './reducers'
-        }),
-        replace({
-            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+            webmms: 'dist/bundle.js'
         }),
         resolve({
             mainFields: ['module', 'main'],
