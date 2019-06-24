@@ -8417,7 +8417,7 @@
       });
 
       webmms.socket.on('disconnect', function () {
-          webmms.store.dispatch(updateSockStat({ isConnected: true }));
+          webmms.store.dispatch(updateSockStat({ isConnected: false }));
           webmms.emit('disconnect', 'websocket disconnect');
       });
 
