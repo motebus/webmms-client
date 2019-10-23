@@ -1,6 +1,6 @@
 {
   "name": "webmms",
-  "version": "0.1.2",
+  "version": "1.2.9",
   "main": "dist/bundle.js",
   "license": "MIT",
   "dependencies": {
