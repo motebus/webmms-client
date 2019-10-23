@@ -1,6 +1,9 @@
-import webmms from 'webmms'
+import webmms from '../dist/bundle'
+import publicIp from 'public-ip'
 import { text, mount } from 'redom'
 import { set as setCookie, get as getCookie } from 'es-cookie'
+
+publicIp.v4().then(console.log)
 
 let EiToken = getCookie('EiToken') || ''
 let SToken = getCookie('SToken') || ''
