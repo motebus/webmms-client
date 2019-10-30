@@ -1,4 +1,4 @@
-# webmms
+# webmms-client
 
 - **Get the webmms instance**
 
