@@ -235,7 +235,11 @@ function createMMS({ wsurl = 'https://lib.ypcloud.com', EiToken = '', SToken = '
         let { EiToken, SToken } = mms
 
         webmms.store.dispatch(updateSockStat({ isConnected: true }))
-        let wip = await publicIp.v4()
+        let wip =  ''
+        try {
+            wip = await publicIp.v4({ timeout: 10000 })
+        } catch(e) {}
+
         webmms.wip = wip
 
         let payload = {
