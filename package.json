@@ -1,10 +1,10 @@
 {
   "name": "webmms",
-  "version": "0.1.2",
+  "version": "1.2.9",
   "main": "dist/bundle.js",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.0",
+    "public-ip": "^3.2.0",
     "redux": "^4.0.1",
     "socket.io-client": "^2.2.0"
   },

@@ -1,16 +1,8 @@
-import axios from 'axios'
+import publicIp from 'public-ip'
 import { createStore } from 'redux'
 import io from 'socket.io-client'
 import reducers from 'reducers'
 import { updateSockStat, regToCenter } from 'actions'
-
-const getipurl = 'https://env.ypcloud.com/getwip'
-const waitForWIP = () => axios({
-    method: 'get',
-    url: getipurl,
-    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-    timeout: 5000
-})
 
 const mmserr = {
     "OK": { "code": 0, "msg": "OK" },
@@ -243,7 +235,7 @@ function createMMS({ wsurl = 'https://lib.ypcloud.com', EiToken = '', SToken = '
         let { EiToken, SToken } = mms
 
         webmms.store.dispatch(updateSockStat({ isConnected: true }))
-        let { data: wip } = await waitForWIP()
+        let wip = await publicIp.v4()
         webmms.wip = wip
 
         let payload = {
